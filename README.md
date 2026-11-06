@@ -2,7 +2,9 @@
 
 **A Claude skill that finds the right skill for your task, security-checks it, and uses it to get the job done.**
 
-When Claude gets a task that a specialized skill would handle better (Excel files, PDFs, slide decks, data viz, …), `skill-finder` does three things:
+`skill-finder` only kicks in for large, multi-step or important tasks that likely need a specialized skill (a full Excel/PDF/slide report, a multi-source research deep-dive, a website deploy, a backtest, a book layout, …). For a simple question it gets out of the way immediately — checking for skills costs tokens, so it's not worth doing for things Claude already answers well on its own.
+
+Once it decides a task is worth it, `skill-finder` does three things:
 
 1. **Searches** your installed skills first, then official catalogs, then trusted GitHub sources.
 2. **Vets** the best candidate by reading `SKILL.md` and every bundled script before using anything.
@@ -11,7 +13,10 @@ When Claude gets a task that a specialized skill would handle better (Excel file
 ## How it works
 
 ```
-Task ──► Installed skills? ──yes──► Use it
+Task ──► Large / specialized task? ──no──► Skip, solve directly (saves tokens)
+              │ yes
+              ▼
+         Installed skills? ──yes──► Use it
               │ no
               ▼
          Official catalog? ──yes──► Offer install card
